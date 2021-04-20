@@ -1,4 +1,4 @@
-import React, { Children } from 'react';
+import React from 'react';
 import {useRef} from 'react';
 import {useMemo} from 'react';
 import {Animated, ScrollView, StyleProp, View, ViewStyle} from 'react-native';
@@ -14,14 +14,14 @@ export const SwiperR: React.FC<{style?: StyleProp<ViewStyle>}> = ({
   const scrollViewRef = useRef<ScrollView>(null);
   console.log('update');
   const Pages = React.Children.toArray(children);
-  Pages.unshift(Pages[Pages.length -1]);
-  Pages.unshift(Pages[Pages.length -2]); 
+  Pages.unshift(Pages[Pages.length - 1]);
+  Pages.unshift(Pages[Pages.length - 2]);
   Pages.push(Pages[2]);
   Pages.push(Pages[3]);
   const transformAnimList = useRef(
     React.Children.map(Pages, () => new Animated.Value(0)),
   ).current;
-  const pageTotal = Pages.length- 1;
+  const pageTotal = Pages.length - 1;
 
   function setAnimated() {
     for (let index = 0; index < transformAnimList!.length; index++) {
@@ -37,7 +37,6 @@ export const SwiperR: React.FC<{style?: StyleProp<ViewStyle>}> = ({
     }
   }
 
-
   setAnimated();
   const previewChildren = useMemo(
     () =>
@@ -48,7 +47,7 @@ export const SwiperR: React.FC<{style?: StyleProp<ViewStyle>}> = ({
             style={{
               ...Style.childContainerStyle,
               transform: [
-               {
+                {
                   translateX: transformAnimList![index],
                 },
               ],
@@ -63,7 +62,7 @@ export const SwiperR: React.FC<{style?: StyleProp<ViewStyle>}> = ({
           </Animated.View>
         );
       }),
-    [children, transformAnimList],
+    [Pages, transformAnimList],
   );
 
   return (
@@ -74,15 +73,24 @@ export const SwiperR: React.FC<{style?: StyleProp<ViewStyle>}> = ({
         contentContainerStyle={Style.contentContainerStyle}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
-        contentOffset ={{x:600,y:0}}
+        contentOffset={{x: 600, y: 0}}
         scrollEventThrottle={16}
+        // onScrollEndDrag={e => {
+        //   const offset = e.nativeEvent.contentOffset.x;
+        //   console.log(offset);
+        // }}
         pagingEnabled={true}
         onScroll={e => {
           const offset = e.nativeEvent.contentOffset.x;
-          if(( pageTotal * 300 - offset) < (20.1+ 300)){
-              scrollViewRef.current?.scrollTo({x: 600,animated:false});
-          } else if(offset  < 20.1+300){
-             scrollViewRef.current?.scrollTo({x: 300 * (pageTotal-2),animated:false});
+          if ((pageTotal - 1) * 300 - offset < 30) {
+            scrollViewRef.current?.scrollTo({x: 600, animated: false, y: 0});
+            console.log(1);
+          } else if (offset - 300 < 20.1) {
+            scrollViewRef.current?.scrollTo({
+              x: 300 * (pageTotal - 2),
+              y: 0,
+              animated: false,
+            });
           }
           let PageFloat = offset / 300;
           const currentPageInt = currentPageFloat % 1;

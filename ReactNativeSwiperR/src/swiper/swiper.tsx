@@ -2,6 +2,7 @@ import React from 'react';
 import {useRef} from 'react';
 import {useMemo} from 'react';
 import {Animated, ScrollView, StyleProp, View, ViewStyle} from 'react-native';
+import {setPages} from './_swiper';
 
 import {Style} from './swiper.style';
 
@@ -11,13 +12,11 @@ export const SwiperR: React.FC<{style?: StyleProp<ViewStyle>}> = ({
 }) => {
   let scrollIndex = 1;
   let currentPageFloat = 0;
+  let contentOffset = 0;
   const scrollViewRef = useRef<ScrollView>(null);
   console.log('update');
   const Pages = React.Children.toArray(children);
-  Pages.unshift(Pages[Pages.length - 1]);
-  Pages.unshift(Pages[Pages.length - 2]);
-  Pages.push(Pages[2]);
-  Pages.push(Pages[3]);
+  setPages(Pages);
   const transformAnimList = useRef(
     React.Children.map(Pages, () => new Animated.Value(0)),
   ).current;
@@ -74,25 +73,28 @@ export const SwiperR: React.FC<{style?: StyleProp<ViewStyle>}> = ({
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
         contentOffset={{x: 600, y: 0}}
-        scrollEventThrottle={16}
-        // onScrollEndDrag={e => {
-        //   const offset = e.nativeEvent.contentOffset.x;
-        //   console.log(offset);
-        // }}
+        scrollEventThrottle={0}
         pagingEnabled={true}
-        onScroll={e => {
-          const offset = e.nativeEvent.contentOffset.x;
+        onMomentumScrollEnd={() => {
+          const offset = contentOffset;
+          console.log((pageTotal - 1) * 300 - offset);
           if ((pageTotal - 1) * 300 - offset < 30) {
-            scrollViewRef.current?.scrollTo({x: 600, animated: false, y: 0});
-            console.log(1);
-          } else if (offset - 300 < 20.1) {
+            scrollViewRef.current?.scrollTo({
+              x: 600,
+              y: 0,
+              animated: false,
+            });
+          } else if (offset - 300 < 30) {
             scrollViewRef.current?.scrollTo({
               x: 300 * (pageTotal - 2),
               y: 0,
               animated: false,
             });
           }
-          let PageFloat = offset / 300;
+        }}
+        onScroll={e => {
+          const offset = (contentOffset = e.nativeEvent.contentOffset.x);
+          const PageFloat = offset / 300;
           const currentPageInt = currentPageFloat % 1;
           if (currentPageInt === 0 || currentPageInt >= 0.9) {
             scrollIndex = Math.ceil(currentPageFloat);

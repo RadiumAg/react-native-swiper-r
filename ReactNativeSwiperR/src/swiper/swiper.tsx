@@ -1,12 +1,11 @@
 import React from 'react';
-import {useRef} from 'react';
-import {useMemo} from 'react';
-import {Animated, ScrollView, StyleProp, View, ViewStyle} from 'react-native';
-import {setPages} from './_swiper';
+import { useRef } from 'react';
+import { useMemo } from 'react';
+import { Animated, ScrollView, StyleProp, View, ViewStyle } from 'react-native';
+import { setPages, setAnimated } from './_swiper';
+import { Style } from './swiper.style';
 
-import {Style} from './swiper.style';
-
-export const SwiperR: React.FC<{style?: StyleProp<ViewStyle>}> = ({
+export const SwiperR: React.FC<{ style?: StyleProp<ViewStyle> }> = ({
   children,
   style,
 }) => {
@@ -14,7 +13,6 @@ export const SwiperR: React.FC<{style?: StyleProp<ViewStyle>}> = ({
   let currentPageFloat = 0;
   let contentOffset = 0;
   const scrollViewRef = useRef<ScrollView>(null);
-  console.log('update');
   const Pages = React.Children.toArray(children);
   setPages(Pages);
   const transformAnimList = useRef(
@@ -22,21 +20,7 @@ export const SwiperR: React.FC<{style?: StyleProp<ViewStyle>}> = ({
   ).current;
   const pageTotal = Pages.length - 1;
 
-  function setAnimated() {
-    for (let index = 0; index < transformAnimList!.length; index++) {
-      if (index === scrollIndex) {
-        transformAnimList![index].setValue(
-          (currentPageFloat - scrollIndex) * 60,
-        );
-      } else if (index === scrollIndex - 1 || index === scrollIndex + 1) {
-        transformAnimList![index].setValue((currentPageFloat - index) * 60);
-      } else {
-        transformAnimList![index].setValue((currentPageFloat - index) * 60);
-      }
-    }
-  }
-
-  setAnimated();
+  setAnimated(transformAnimList, scrollIndex, currentPageFloat);
   const previewChildren = useMemo(
     () =>
       Pages.map((child, index) => {
@@ -52,17 +36,25 @@ export const SwiperR: React.FC<{style?: StyleProp<ViewStyle>}> = ({
               ],
             }}>
             <View
-              style={{width: 40, height: 100, backgroundColor: 'transparent'}}
+              style={{ width: 40, height: 100, backgroundColor: 'transparent' }}
             />
             {child}
             <View
-              style={{width: 40, height: 100, backgroundColor: 'transparent'}}
+              style={{ width: 40, height: 100, backgroundColor: 'transparent' }}
             />
           </Animated.View>
         );
       }),
     [Pages, transformAnimList],
   );
+
+  // useEffect(() => {
+  //   setInterval(() => {
+  //     // eslint-disable-next-line react-hooks/exhaustive-deps
+  //     scrollIndex = scrollIndex++;
+  //     currentPageFloat = scor
+  //   }, 1000);
+  // });
 
   return (
     <View style={style}>
@@ -72,7 +64,7 @@ export const SwiperR: React.FC<{style?: StyleProp<ViewStyle>}> = ({
         contentContainerStyle={Style.contentContainerStyle}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
-        contentOffset={{x: 600, y: 0}}
+        contentOffset={{ x: 600, y: 0 }}
         scrollEventThrottle={0}
         pagingEnabled={true}
         onMomentumScrollEnd={() => {
@@ -100,7 +92,7 @@ export const SwiperR: React.FC<{style?: StyleProp<ViewStyle>}> = ({
             scrollIndex = Math.ceil(currentPageFloat);
           }
           currentPageFloat = PageFloat;
-          setAnimated();
+          setAnimated(transformAnimList, scrollIndex, currentPageFloat);
         }}>
         {previewChildren}
       </ScrollView>

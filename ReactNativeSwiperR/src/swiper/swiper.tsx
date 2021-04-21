@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRef } from 'react';
 import { useMemo } from 'react';
 import { Animated, ScrollView, StyleProp, View, ViewStyle } from 'react-native';
-import { setPages, setAnimated } from './_swiper';
+import { setPages, setAnimated, scrollSetting } from './_swiper';
 import { Style } from './swiper.style';
 
 export const SwiperR: React.FC<{ style?: StyleProp<ViewStyle> }> = ({
@@ -48,13 +48,12 @@ export const SwiperR: React.FC<{ style?: StyleProp<ViewStyle> }> = ({
     [Pages, transformAnimList],
   );
 
-  // useEffect(() => {
-  //   setInterval(() => {
-  //     // eslint-disable-next-line react-hooks/exhaustive-deps
-  //     scrollIndex = scrollIndex++;
-  //     currentPageFloat = scor
-  //   }, 1000);
-  // });
+  useEffect(() => {
+    setInterval(() => {
+      // console.log(scrollIndex);
+      scrollViewRef.current?.scrollTo({ y: 0, x: (scrollIndex + 1) * 300 });
+    }, 1000);
+  });
 
   return (
     <View style={style}>
@@ -69,7 +68,6 @@ export const SwiperR: React.FC<{ style?: StyleProp<ViewStyle> }> = ({
         pagingEnabled={true}
         onMomentumScrollEnd={() => {
           const offset = contentOffset;
-          console.log((pageTotal - 1) * 300 - offset);
           if ((pageTotal - 1) * 300 - offset < 30) {
             scrollViewRef.current?.scrollTo({
               x: 600,
@@ -85,13 +83,12 @@ export const SwiperR: React.FC<{ style?: StyleProp<ViewStyle> }> = ({
           }
         }}
         onScroll={e => {
-          const offset = (contentOffset = e.nativeEvent.contentOffset.x);
-          const PageFloat = offset / 300;
-          const currentPageInt = currentPageFloat % 1;
-          if (currentPageInt === 0 || currentPageInt >= 0.9) {
-            scrollIndex = Math.ceil(currentPageFloat);
-          }
-          currentPageFloat = PageFloat;
+          ({ contentOffset, currentPageFloat, scrollIndex } = scrollSetting(
+            contentOffset,
+            e,
+            currentPageFloat,
+            scrollIndex,
+          ));
           setAnimated(transformAnimList, scrollIndex, currentPageFloat);
         }}>
         {previewChildren}

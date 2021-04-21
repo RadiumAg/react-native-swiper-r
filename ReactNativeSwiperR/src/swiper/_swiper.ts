@@ -1,3 +1,4 @@
+import { NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
 import { Animated } from 'react-native';
 
 export function setPages(
@@ -23,4 +24,20 @@ export function setAnimated(
       transformAnimList![index].setValue((currentPageFloat - index) * 60);
     }
   }
+}
+
+export function scrollSetting(
+  contentOffset: number,
+  e: NativeSyntheticEvent<NativeScrollEvent>,
+  currentPageFloat: number,
+  scrollIndex: number,
+) {
+  const offset = (contentOffset = e.nativeEvent.contentOffset.x);
+  const PageFloat = offset / 300;
+  const currentPageInt = currentPageFloat % 1;
+  if (currentPageInt === 0 || currentPageInt >= 0.9) {
+    scrollIndex = Math.ceil(currentPageFloat);
+  }
+  currentPageFloat = PageFloat;
+  return { contentOffset, currentPageFloat, scrollIndex };
 }

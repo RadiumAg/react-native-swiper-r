@@ -9,10 +9,7 @@ export interface SwiperProps {
   style?: ViewStyle;
   isAutoPlay?: boolean;
   cardSetting: {
-    left: number;
-    right: number;
-    top: number;
-    bottom: number;
+    width: number;
   };
 }
 
@@ -29,14 +26,21 @@ export function setAnimated(
   transformAnimList: Animated.Value[],
   scrollIndex: number,
   currentPageFloat: number,
+  cardSetting: { width: number },
 ) {
   for (let index = 0; index < transformAnimList!.length; index++) {
     if (index === scrollIndex) {
-      transformAnimList![index].setValue((currentPageFloat - scrollIndex) * 60);
+      transformAnimList![index].setValue(
+        (currentPageFloat - scrollIndex) * cardSetting.width * 2,
+      );
     } else if (index === scrollIndex - 1 || index === scrollIndex + 1) {
-      transformAnimList![index].setValue((currentPageFloat - index) * 60);
+      transformAnimList![index].setValue(
+        (currentPageFloat - index) * cardSetting.width * 2,
+      );
     } else {
-      transformAnimList![index].setValue((currentPageFloat - index) * 60);
+      transformAnimList![index].setValue(
+        (currentPageFloat - index) * cardSetting.width * 2,
+      );
     }
   }
 }
@@ -55,4 +59,11 @@ export function scrollSetting(
     scrollIndex.current = Math.ceil(currentPageFloat);
   }
   return { contentOffset, currentPageFloat, scrollIndex };
+}
+
+export function getSwiperWidth(style: ViewStyle) {
+  if (typeof style.width === 'string') {
+    if (style.width.includes('%')) {
+    }
+  }
 }

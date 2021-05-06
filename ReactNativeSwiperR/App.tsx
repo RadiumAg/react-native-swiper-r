@@ -1,7 +1,6 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { SwiperR } from './src/swiper/swiper';
-import Swiper from 'react-native-swiper-hooks';
 
 var styles = StyleSheet.create({
   wrapper: {
@@ -69,11 +68,11 @@ const App = () => {
   return (
     // eslint-disable-next-line react-native/no-inline-styles
     <SafeAreaView style={{ flex: 1 }}>
-      <SwiperR style={{ width: 300, height: 100 }}>
+      <SwiperR style={{ width: 300, height: 100 }} cardSetting={{ width: 0 }}>
         <View
           style={{
             backgroundColor: 'pink',
-            width: 220,
+            flex: 1,
             height: 100,
             justifyContent: 'center',
             alignItems: 'center',
@@ -83,7 +82,7 @@ const App = () => {
         <View
           style={{
             backgroundColor: 'black',
-            width: 220,
+            flex: 1,
             height: 100,
             justifyContent: 'center',
             alignItems: 'center',
@@ -93,7 +92,7 @@ const App = () => {
         <View
           style={{
             backgroundColor: 'blue',
-            width: 220,
+            flex: 1,
             height: 100,
             justifyContent: 'center',
             alignItems: 'center',
@@ -103,7 +102,7 @@ const App = () => {
         <View
           style={{
             backgroundColor: 'green',
-            width: 220,
+            flex: 1,
             height: 100,
             justifyContent: 'center',
             alignItems: 'center',

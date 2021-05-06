@@ -70,16 +70,44 @@ const App = () => {
     // eslint-disable-next-line react-native/no-inline-styles
     <SafeAreaView style={{ flex: 1 }}>
       <SwiperR style={{ width: 300, height: 100 }}>
-        <View style={{ backgroundColor: 'pink', width: 220, height: 100 }}>
+        <View
+          style={{
+            backgroundColor: 'pink',
+            width: 220,
+            height: 100,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
           <Text>1</Text>
         </View>
-        <View style={{ backgroundColor: 'black', width: 220, height: 100 }}>
+        <View
+          style={{
+            backgroundColor: 'black',
+            width: 220,
+            height: 100,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
           <Text style={{ color: 'white' }}>2</Text>
         </View>
-        <View style={{ backgroundColor: 'blue', width: 220, height: 100 }}>
+        <View
+          style={{
+            backgroundColor: 'blue',
+            width: 220,
+            height: 100,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
           <Text style={{ color: 'white' }}>3</Text>
         </View>
-        <View style={{ backgroundColor: 'green', width: 220, height: 100 }}>
+        <View
+          style={{
+            backgroundColor: 'green',
+            width: 220,
+            height: 100,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
           <Text style={{ color: 'white' }}>4</Text>
         </View>
       </SwiperR>

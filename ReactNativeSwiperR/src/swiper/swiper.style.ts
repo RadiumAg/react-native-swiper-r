@@ -6,5 +6,9 @@ export const Style = StyleSheet.create({
   },
   childContainerStyle: {
     flexDirection: 'row',
+    overflow: 'hidden',
+  },
+  cardStyle: {
+    backgroundColor: 'transparent',
   },
 });

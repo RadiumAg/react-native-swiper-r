@@ -1,14 +1,19 @@
 import {
   NativeScrollEvent,
   NativeSyntheticEvent,
-  StyleProp,
   ViewStyle,
 } from 'react-native';
 import { Animated } from 'react-native';
 
 export interface SwiperProps {
-  style?: StyleProp<ViewStyle>;
-  isAutoPlay: boolean;
+  style?: ViewStyle;
+  isAutoPlay?: boolean;
+  cardSetting: {
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
+  };
 }
 
 export function setPages(

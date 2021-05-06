@@ -1,5 +1,15 @@
-import { NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
+import {
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  StyleProp,
+  ViewStyle,
+} from 'react-native';
 import { Animated } from 'react-native';
+
+export interface SwiperProps {
+  style?: StyleProp<ViewStyle>;
+  isAutoPlay: boolean;
+}
 
 export function setPages(
   Pages: (React.ReactChild | React.ReactFragment | React.ReactPortal)[],
@@ -30,14 +40,14 @@ export function scrollSetting(
   contentOffset: number,
   e: NativeSyntheticEvent<NativeScrollEvent>,
   currentPageFloat: number,
-  scrollIndex: number,
+  scrollIndex: React.MutableRefObject<number>,
 ) {
   const offset = (contentOffset = e.nativeEvent.contentOffset.x);
   const PageFloat = offset / 300;
+  currentPageFloat = PageFloat;
   const currentPageInt = currentPageFloat % 1;
   if (currentPageInt === 0 || currentPageInt >= 0.9) {
-    scrollIndex = Math.ceil(currentPageFloat);
+    scrollIndex.current = Math.ceil(currentPageFloat);
   }
-  currentPageFloat = PageFloat;
   return { contentOffset, currentPageFloat, scrollIndex };
 }

@@ -1,6 +1,6 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import {SwiperR} from './src/swiper/swiper';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SwiperR } from './src/swiper/swiper';
 import Swiper from 'react-native-swiper-hooks';
 
 var styles = StyleSheet.create({
@@ -68,21 +68,29 @@ const _renderList = () => {
 const App = () => {
   return (
     // eslint-disable-next-line react-native/no-inline-styles
-    <SafeAreaView style={{flex: 1}}>
-      <SwiperR style={{width: 300, height: 100}}>
-        <View style={{backgroundColor: 'pink', width: 220, height: 100}} />
-        <View style={{backgroundColor: 'black', width: 220, height: 100}} />
-        <View style={{backgroundColor: 'blue', width: 220, height: 100}} />
-        <View style={{backgroundColor: 'green', width: 220, height: 100}} />
+    <SafeAreaView style={{ flex: 1 }}>
+      <SwiperR style={{ width: 300, height: 100 }}>
+        <View style={{ backgroundColor: 'pink', width: 220, height: 100 }}>
+          <Text>1</Text>
+        </View>
+        <View style={{ backgroundColor: 'black', width: 220, height: 100 }}>
+          <Text style={{ color: 'white' }}>2</Text>
+        </View>
+        <View style={{ backgroundColor: 'blue', width: 220, height: 100 }}>
+          <Text style={{ color: 'white' }}>3</Text>
+        </View>
+        <View style={{ backgroundColor: 'green', width: 220, height: 100 }}>
+          <Text style={{ color: 'white' }}>4</Text>
+        </View>
       </SwiperR>
-      <Swiper
+      {/* <Swiper
         width={300}
         height={300}
         paginationSelectedColor={'#CCFF66'}
         autoplay={false}
         direction={'row'}>
         {_renderList()}
-      </Swiper>
+      </Swiper> */}
       {/* <Swiper style={styles.wrapper} showsButtons loop={true}>
         <View testID="Hello" style={styles.slide1}>
           <Text style={styles.text}>Hello Swiper</Text>

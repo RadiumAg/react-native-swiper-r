@@ -15,7 +15,7 @@ export const SwiperR: React.FC<SwiperProps> = memo(
   ({
     children,
     style,
-    isAutoPlay = false,
+    autoplay: isAutoPlay = false,
     cardSetting = { cardSmallSide: 0, cardSpace: 50 },
     contentOffset,
     mode = 'normal',

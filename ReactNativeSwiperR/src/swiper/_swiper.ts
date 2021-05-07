@@ -7,7 +7,7 @@ import { Animated } from 'react-native';
 
 export interface SwiperProps {
   style?: ViewStyle;
-  isAutoPlay?: boolean;
+  autoplay?: boolean;
   contentOffset?: number;
   mode: 'normal' | 'cardSide';
   cardSetting?: {

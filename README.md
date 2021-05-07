@@ -3,6 +3,7 @@
 
 
 
+
 Api
 
 | 参数          | 说明                      | 类型                  | 默认值   |
@@ -12,6 +13,7 @@ Api
 | mode          | normal和cardSide,详见下图 | 'normal' \|'cardSide' | 'normal' |
 | contentOffset | 初始位置                  | number                | 0        |
 
+cardSetting参数说明
 
-cardSetting 参数说明
 ![](https://raw.githubusercontent.com/RadiumAg/react-native-swiper-r/master/cardParams.png)
+

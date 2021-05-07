@@ -72,7 +72,7 @@ const App = () => {
         isAutoPlay={false}
         mode="cardSide"
         style={{ width: '100%', height: 100 }}
-        cardSetting={{ cardSmallSide: 40 }}>
+        cardSetting={{ cardSmallSide: 10, cardSide: 300 }}>
         <View
           style={{
             backgroundColor: 'pink',

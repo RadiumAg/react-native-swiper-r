@@ -34,13 +34,6 @@ export const SwiperR: React.FC<SwiperProps> = memo(
     ).current;
     const pageTotal = Pages.length - 1;
 
-    setAnimated(
-      transformAnimList,
-      scrollIndex.current,
-      currentPageFloat,
-      cardSetting,
-    );
-
     setCardSetting(mode, cardSetting);
 
     const setInitialContentOffset = () => {
@@ -59,7 +52,7 @@ export const SwiperR: React.FC<SwiperProps> = memo(
       }
     };
 
-    const cardWidth = useCallback(() => {
+    const getCardWidth = useCallback(() => {
       if (mode === 'normal') {
         return containerWidthState;
       } else if (mode === 'cardSide') {
@@ -67,16 +60,27 @@ export const SwiperR: React.FC<SwiperProps> = memo(
       }
     }, [cardSetting.cardSide, containerWidthState, mode]);
 
+    const whiteSpace = useMemo(() => {
+      return (containerWidthState - getCardWidth()) / 2;
+    }, [getCardWidth, containerWidthState]);
+
+    setAnimated(
+      transformAnimList,
+      scrollIndex.current,
+      currentPageFloat,
+      whiteSpace,
+      cardSetting,
+    );
+
     const previewChildren = useMemo(() => {
       return Pages.map((child, index) => {
-        console.log(transformAnimList![index], index);
         return (
           <Animated.View
             key={index}
             style={[
               Style.childContainerStyle,
               {
-                width: cardWidth(),
+                width: containerWidthState,
               },
               {
                 transform: [
@@ -86,17 +90,13 @@ export const SwiperR: React.FC<SwiperProps> = memo(
                 ],
               },
             ]}>
-            <View
-              style={[Style.cardStyle, { width: cardSetting?.cardSmallSide }]}
-            />
+            <View style={[Style.cardStyle, { width: whiteSpace }]} />
             {child}
-            <View
-              style={[Style.cardStyle, { width: cardSetting?.cardSmallSide }]}
-            />
+            <View style={[Style.cardStyle, { width: whiteSpace }]} />
           </Animated.View>
         );
       });
-    }, [Pages, cardSetting?.cardSmallSide, cardWidth, transformAnimList]);
+    }, [Pages, containerWidthState, transformAnimList, whiteSpace]);
 
     const isStartOrEnd = useCallback(() => {
       const offset = currentContentOffset;
@@ -196,6 +196,7 @@ export const SwiperR: React.FC<SwiperProps> = memo(
               transformAnimList,
               scrollIndex.current,
               currentPageFloat,
+              whiteSpace,
               cardSetting,
             );
           }}>

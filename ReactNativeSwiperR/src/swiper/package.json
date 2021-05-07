@@ -1,6 +1,6 @@
 {
   "name": "react-native-swiper-r",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "a react-natvie swiper",
   "main": "index.ts",
   "scripts": {

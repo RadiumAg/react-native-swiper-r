@@ -13,3 +13,5 @@ Api
 | contentOffset | 初始位置                  | number                | 0        |
 
 
+cardSetting 参数说明
+![](https://raw.githubusercontent.com/RadiumAg/react-native-swiper-r/master/cardParams.png)

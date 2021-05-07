@@ -1,6 +1,7 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import { SwiperR } from './src/swiper/swiper';
+// import { SwiperR } from './src/swiper/swiper';
+import { SwiperR } from 'react-native-swiper-r';
 
 var styles = StyleSheet.create({
   wrapper: {
@@ -69,10 +70,10 @@ const App = () => {
     // eslint-disable-next-line react-native/no-inline-styles
     <SafeAreaView style={{ flex: 1 }}>
       <SwiperR
-        isAutoPlay={false}
-        mode="cardSide"
+        isAutoPlay={true}
+        mode={'cardSide'}
         style={{ width: '100%', height: 100 }}
-        cardSetting={{ cardSmallSide: 10, cardSide: 300 }}>
+        cardSetting={{ cardSmallSide: 10, cardSide: 300, cardSpace: 50 }}>
         <View
           style={{
             backgroundColor: 'pink',

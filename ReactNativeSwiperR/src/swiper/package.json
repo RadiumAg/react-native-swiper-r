@@ -1,0 +1,15 @@
+{
+  "name": "react-native-swiper-r",
+  "version": "1.0.1",
+  "description": "a react-natvie swiper",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "react": "17.0.1",
+    "react-native": "0.64.0"
+  },
+  "author": "Radium",
+  "license": "ISC"
+}

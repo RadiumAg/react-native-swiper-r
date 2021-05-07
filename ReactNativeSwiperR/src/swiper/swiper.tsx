@@ -16,7 +16,7 @@ export const SwiperR: React.FC<SwiperProps> = memo(
     children,
     style,
     isAutoPlay = false,
-    cardSetting = { cardSmallSide: 0 },
+    cardSetting = { cardSmallSide: 0, cardSpace: 50 },
     contentOffset,
     mode = 'normal',
   }) => {
@@ -27,13 +27,20 @@ export const SwiperR: React.FC<SwiperProps> = memo(
     let currentContentOffset = 0;
     let containerRef = useRef<View>();
     const [containerWidthState, setContainerWidthState] = useState(0);
+    const [containerHeightState, setContainerHeightState] = useState(0);
     const Pages = React.Children.toArray(children);
+    // set the header and foorter page
     setPages(Pages);
-    const transformAnimList = useRef(
+    const translateAnimList = useRef(
+      React.Children.map(Pages, () => new Animated.Value(0)),
+    ).current;
+    const scaleAnimList = useRef(
       React.Children.map(Pages, () => new Animated.Value(0)),
     ).current;
     const pageTotal = Pages.length - 1;
-
+    const scaleRate = useMemo(() => {
+      return cardSetting.cardSpace / (containerHeightState || 2);
+    }, [cardSetting.cardSpace, containerHeightState]);
     setCardSetting(mode, cardSetting);
 
     const setInitialContentOffset = () => {
@@ -65,10 +72,12 @@ export const SwiperR: React.FC<SwiperProps> = memo(
     }, [getCardWidth, containerWidthState]);
 
     setAnimated(
-      transformAnimList,
+      translateAnimList,
+      scaleAnimList,
       scrollIndex.current,
       currentPageFloat,
       whiteSpace,
+      scaleRate,
       cardSetting,
     );
 
@@ -85,7 +94,10 @@ export const SwiperR: React.FC<SwiperProps> = memo(
               {
                 transform: [
                   {
-                    translateX: transformAnimList![index],
+                    translateX: translateAnimList[index],
+                  },
+                  {
+                    scaleY: scaleAnimList[index],
                   },
                 ],
               },
@@ -96,7 +108,13 @@ export const SwiperR: React.FC<SwiperProps> = memo(
           </Animated.View>
         );
       });
-    }, [Pages, containerWidthState, transformAnimList, whiteSpace]);
+    }, [
+      Pages,
+      containerWidthState,
+      scaleAnimList,
+      translateAnimList,
+      whiteSpace,
+    ]);
 
     const isStartOrEnd = useCallback(() => {
       const offset = currentContentOffset;
@@ -139,7 +157,7 @@ export const SwiperR: React.FC<SwiperProps> = memo(
           y: 0,
           x: (scrollIndex.current + 1) * containerWidthState,
         });
-      }, 2000);
+      }, 3000);
     };
 
     useEffect(() => {
@@ -153,13 +171,12 @@ export const SwiperR: React.FC<SwiperProps> = memo(
     });
 
     return (
-      <View
-        onLayout={e => {
-          setContainerWidthState(e.nativeEvent.layout.width);
-        }}
-        ref={containerRef}
-        style={style}>
+      <View ref={containerRef} style={style}>
         <ScrollView
+          onLayout={e => {
+            setContainerWidthState(e.nativeEvent.layout.width);
+            setContainerHeightState(e.nativeEvent.layout.height);
+          }}
           ref={scrollViewRef}
           horizontal={true}
           contentContainerStyle={[Style.contentContainerStyle]}
@@ -167,6 +184,7 @@ export const SwiperR: React.FC<SwiperProps> = memo(
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={16}
           pagingEnabled={true}
+          contentOffset={{ x: containerWidthState * scrollIndex.current, y: 0 }}
           onScrollBeginDrag={() => {
             if (timerSign.current) {
               clearInterval(timerSign.current);
@@ -193,10 +211,12 @@ export const SwiperR: React.FC<SwiperProps> = memo(
               containerWidthState,
             ));
             setAnimated(
-              transformAnimList,
+              translateAnimList,
+              scaleAnimList,
               scrollIndex.current,
               currentPageFloat,
               whiteSpace,
+              scaleRate,
               cardSetting,
             );
           }}>

@@ -2,16 +2,29 @@ import React, { memo, useCallback, useEffect, useState } from 'react';
 import { useRef } from 'react';
 import { useMemo } from 'react';
 import { Animated, ScrollView, View } from 'react-native';
-import { setPages, setAnimated, scrollSetting, SwiperProps } from './_swiper';
+import {
+  setPages,
+  setAnimated,
+  scrollSetting,
+  SwiperProps,
+  setCardSetting,
+} from './_swiper';
 import { Style } from './swiper.style';
 
 export const SwiperR: React.FC<SwiperProps> = memo(
-  ({ children, style, isAutoPlay = true, cardSetting = { width: 0 } }) => {
+  ({
+    children,
+    style,
+    isAutoPlay = false,
+    cardSetting = { cardSmallSide: 0 },
+    contentOffset,
+    mode = 'normal',
+  }) => {
     const timerSign = useRef<NodeJS.Timer>();
     const scrollViewRef = useRef<ScrollView>(null);
     let scrollIndex = useRef(2);
     let currentPageFloat = 2;
-    let contentOffset = 0;
+    let currentContentOffset = 0;
     let containerRef = useRef<View>();
     const [containerWidthState, setContainerWidthState] = useState(0);
     const Pages = React.Children.toArray(children);
@@ -28,50 +41,87 @@ export const SwiperR: React.FC<SwiperProps> = memo(
       cardSetting,
     );
 
-    const previewChildren = useMemo(
-      () =>
-        Pages.map((child, index) => {
-          return (
-            <Animated.View
-              key={index}
-              style={[
-                Style.childContainerStyle,
-                {
-                  width: containerWidthState,
-                },
-                {
-                  transform: [
-                    {
-                      translateX: transformAnimList![index],
-                    },
-                  ],
-                },
-              ]}>
-              <View style={[Style.cardStyle, { width: cardSetting?.width }]} />
-              {child}
-              <View style={[Style.cardStyle, { width: cardSetting?.width }]} />
-            </Animated.View>
-          );
-        }),
-      [Pages, cardSetting?.width, containerWidthState, transformAnimList],
-    );
+    setCardSetting(mode, cardSetting);
+
+    const setInitialContentOffset = () => {
+      if (contentOffset) {
+        scrollViewRef.current.scrollTo({
+          y: 0,
+          x: contentOffset,
+          animated: false,
+        });
+      } else {
+        scrollViewRef.current.scrollTo({
+          y: 0,
+          x: containerWidthState * 2,
+          animated: false,
+        });
+      }
+    };
+
+    const cardWidth = useCallback(() => {
+      if (mode === 'normal') {
+        return containerWidthState;
+      } else if (mode === 'cardSide') {
+        return cardSetting.cardSide || containerWidthState;
+      }
+    }, [cardSetting.cardSide, containerWidthState, mode]);
+
+    const previewChildren = useMemo(() => {
+      return Pages.map((child, index) => {
+        console.log(transformAnimList![index], index);
+        return (
+          <Animated.View
+            key={index}
+            style={[
+              Style.childContainerStyle,
+              {
+                width: cardWidth(),
+              },
+              {
+                transform: [
+                  {
+                    translateX: transformAnimList![index],
+                  },
+                ],
+              },
+            ]}>
+            <View
+              style={[Style.cardStyle, { width: cardSetting?.cardSmallSide }]}
+            />
+            {child}
+            <View
+              style={[Style.cardStyle, { width: cardSetting?.cardSmallSide }]}
+            />
+          </Animated.View>
+        );
+      });
+    }, [Pages, cardSetting?.cardSmallSide, cardWidth, transformAnimList]);
 
     const isStartOrEnd = useCallback(() => {
-      const offset = contentOffset;
-      if ((pageTotal - 1) * containerWidthState - offset < cardSetting.width) {
+      const offset = currentContentOffset;
+      if (
+        (pageTotal - 1) * containerWidthState - offset <=
+        cardSetting.cardSmallSide
+      ) {
         scrollViewRef.current?.scrollTo({
-          x: containerWidthState,
+          x: containerWidthState * 2,
           y: 0,
           animated: false,
         });
-      } else if (offset - containerWidthState < cardSetting.width) {
+      } else if (offset - containerWidthState <= cardSetting.cardSmallSide) {
         scrollViewRef.current?.scrollTo({
           x: containerWidthState * (pageTotal - 2),
           y: 0,
           animated: false,
         });
       }
-    }, [cardSetting.width, containerWidthState, contentOffset, pageTotal]);
+    }, [
+      cardSetting.cardSmallSide,
+      containerWidthState,
+      currentContentOffset,
+      pageTotal,
+    ]);
 
     const autoPlay = () => {
       if (timerSign.current) {
@@ -92,8 +142,15 @@ export const SwiperR: React.FC<SwiperProps> = memo(
       }, 2000);
     };
 
-    // autoPlay();
-    console.log(containerWidthState);
+    useEffect(() => {
+      setInitialContentOffset();
+      if (isAutoPlay) {
+        autoPlay();
+      }
+      return () => {
+        clearInterval(timerSign.current);
+      };
+    });
 
     return (
       <View
@@ -108,7 +165,6 @@ export const SwiperR: React.FC<SwiperProps> = memo(
           contentContainerStyle={[Style.contentContainerStyle]}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
-          contentOffset={{ x: containerWidthState * 2, y: 0 }}
           scrollEventThrottle={16}
           pagingEnabled={true}
           onScrollBeginDrag={() => {
@@ -117,19 +173,25 @@ export const SwiperR: React.FC<SwiperProps> = memo(
             }
           }}
           onScrollEndDrag={() => {
-            // autoPlay();
+            if (isAutoPlay) {
+              autoPlay();
+            }
           }}
           onMomentumScrollEnd={() => {
             isStartOrEnd();
           }}
           onScroll={e => {
-            ({ contentOffset, currentPageFloat, scrollIndex } = scrollSetting(
-              contentOffset,
+            ({
+              contentOffset: currentContentOffset,
+              currentPageFloat,
+              scrollIndex,
+            } = scrollSetting(
+              currentContentOffset,
               e,
               currentPageFloat,
               scrollIndex,
+              containerWidthState,
             ));
-            console.log(contentOffset);
             setAnimated(
               transformAnimList,
               scrollIndex.current,

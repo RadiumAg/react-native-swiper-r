@@ -68,7 +68,11 @@ const App = () => {
   return (
     // eslint-disable-next-line react-native/no-inline-styles
     <SafeAreaView style={{ flex: 1 }}>
-      <SwiperR style={{ width: 300, height: 100 }} cardSetting={{ width: 0 }}>
+      <SwiperR
+        isAutoPlay={false}
+        mode="cardSide"
+        style={{ width: '100%', height: 100 }}
+        cardSetting={{ cardSmallSide: 40 }}>
         <View
           style={{
             backgroundColor: 'pink',

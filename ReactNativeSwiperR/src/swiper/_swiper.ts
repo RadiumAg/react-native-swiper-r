@@ -8,9 +8,26 @@ import { Animated } from 'react-native';
 export interface SwiperProps {
   style?: ViewStyle;
   isAutoPlay?: boolean;
-  cardSetting: {
-    width: number;
+  contentOffset?: number;
+  mode: 'normal' | 'cardSide';
+  cardSetting?: {
+    cardSide?: number;
+    cardSmallSide?: number;
+    cardSpace?: number;
   };
+}
+
+export function setCardSetting(
+  mode: string,
+  cardSetting: {
+    cardSide?: number;
+    cardSmallSide?: number;
+    cardSpace?: number;
+  },
+) {
+  if (mode === 'normal') {
+    cardSetting.cardSmallSide = 0;
+  }
 }
 
 export function setPages(
@@ -26,23 +43,32 @@ export function setAnimated(
   transformAnimList: Animated.Value[],
   scrollIndex: number,
   currentPageFloat: number,
-  cardSetting: { width: number },
+  cardSetting: {
+    cardSide?: number;
+    cardSmallSide?: number;
+    cardSpace?: number;
+  },
 ) {
   for (let index = 0; index < transformAnimList!.length; index++) {
     if (index === scrollIndex) {
       transformAnimList![index].setValue(
-        (currentPageFloat - scrollIndex) * cardSetting.width * 2,
+        (currentPageFloat - scrollIndex) *
+          (cardSetting.cardSmallSide * 2 - cardSetting.cardSmallSide),
       );
     } else if (index === scrollIndex - 1 || index === scrollIndex + 1) {
       transformAnimList![index].setValue(
-        (currentPageFloat - index) * cardSetting.width * 2,
+        (currentPageFloat - index) *
+          (cardSetting.cardSmallSide * 2 - cardSetting.cardSmallSide),
       );
     } else {
       transformAnimList![index].setValue(
-        (currentPageFloat - index) * cardSetting.width * 2,
+        (currentPageFloat - index) *
+          (cardSetting.cardSmallSide * 2 - cardSetting.cardSmallSide),
       );
     }
   }
+  transformAnimList = transformAnimList.slice();
+  console.log(transformAnimList);
 }
 
 export function scrollSetting(
@@ -50,9 +76,10 @@ export function scrollSetting(
   e: NativeSyntheticEvent<NativeScrollEvent>,
   currentPageFloat: number,
   scrollIndex: React.MutableRefObject<number>,
+  containerWidth: number,
 ) {
   const offset = (contentOffset = e.nativeEvent.contentOffset.x);
-  const PageFloat = offset / 300;
+  const PageFloat = offset / containerWidth;
   currentPageFloat = PageFloat;
   const currentPageInt = currentPageFloat % 1;
   if (currentPageInt === 0 || currentPageInt >= 0.9) {

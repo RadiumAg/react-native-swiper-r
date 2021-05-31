@@ -74,13 +74,13 @@ export function setAnimated(
       if (!cardSetting.cardSpace) {
         continue;
       }
-      console.log(currentPageFloat - scrollIndex);
 
-      if (currentPageFloat >= scrollIndex) {
-        console.log(currentPageFloat - scrollIndex);
+      if (currentPageFloat > scrollIndex) {
         currentScaleRate = 1 - currentPageFloat + scrollIndex;
-      } else if (currentPageFloat <= scrollIndex) {
-        currentScaleRate = currentPageFloat - scrollIndex;
+      } else if (currentPageFloat < scrollIndex) {
+        currentScaleRate = scrollIndex - currentPageFloat;
+      } else if (currentPageFloat === scrollIndex) {
+        currentScaleRate = 1;
       }
       if (currentScaleRate < scaleRate) {
         currentScaleRate = scaleRate;
@@ -97,11 +97,14 @@ export function setAnimated(
       if (!cardSetting.cardSpace) {
         continue;
       }
-      currentScaleRate = scaleRate * Math.abs(currentPageFloat - index);
-      currentScaleRate = isOverRate(currentScaleRate, scaleRate);
+
       if (index === scrollIndex - 1) {
+        currentScaleRate = Math.abs(currentPageFloat - index);
+        currentScaleRate = isOverRate(currentScaleRate, scaleRate);
         scaleAnimList[scrollIndex + 1]?.setValue(currentScaleRate);
       } else if (index === scrollIndex + 1) {
+        currentScaleRate = Math.abs(currentPageFloat - index);
+        currentScaleRate = isOverRate(currentScaleRate, scaleRate);
         scaleAnimList[scrollIndex - 1]?.setValue(currentScaleRate);
       }
     } else {
@@ -133,6 +136,8 @@ export function scrollSetting(
   if (currentPageInt === 0 || currentPageInt >= 0.9) {
     scrollIndex.current = Math.ceil(currentPageFloat);
   }
+  scrollIndex.current = Math.floor(currentPageFloat);
+
   return { contentOffset, currentPageFloat, scrollIndex };
 }
 

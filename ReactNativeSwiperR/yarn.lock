@@ -5377,6 +5377,14 @@
   "resolved" "https://registry.npmjs.org/react-native-swiper-hooks/-/react-native-swiper-hooks-1.3.7.tgz"
   "version" "1.3.7"
 
+"react-native-swiper-r@^1.0.1":
+  "integrity" "sha512-97+QCF7XKLA2Cl0ZhtDjcLQPhYMhJ0ESGnpTZUFvkhCNMlriA5+/zntY8d/EDCMEfen02q+q+3307AVuVeQI3w=="
+  "resolved" "https://registry.npmjs.org/react-native-swiper-r/-/react-native-swiper-r-1.0.1.tgz"
+  "version" "1.0.1"
+  dependencies:
+    "react" "17.0.1"
+    "react-native" "0.64.0"
+
 "react-native-swiper@^1.6.0":
   "integrity" "sha512-OnkTTZi+9uZUgy0uz1I9oYDhCU3z36lZn+LFsk9FXPRelxb/KeABzvPs3r3SrHWy1aA67KGtSFj0xNK2QD0NJQ=="
   "resolved" "https://registry.npmjs.org/react-native-swiper/-/react-native-swiper-1.6.0.tgz"

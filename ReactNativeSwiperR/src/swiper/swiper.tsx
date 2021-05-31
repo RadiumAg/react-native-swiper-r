@@ -15,11 +15,12 @@ export const SwiperR: React.FC<SwiperProps> = memo(
   ({
     children,
     style,
-    autoplay: isAutoPlay = false,
-    cardSetting = { cardSmallSide: 0, cardSpace: 50 },
+    autoPlay = false,
+    cardSetting = { cardSmallSide: 0, cardSpace: 0 },
     contentOffset,
     mode = 'normal',
   }) => {
+    const isAutoPlay = autoPlay;
     const timerSign = useRef<NodeJS.Timer>();
     const scrollViewRef = useRef<ScrollView>(null);
     let scrollIndex = useRef(2);
@@ -35,7 +36,7 @@ export const SwiperR: React.FC<SwiperProps> = memo(
       React.Children.map(Pages, () => new Animated.Value(0)),
     ).current;
     const scaleAnimList = useRef(
-      React.Children.map(Pages, () => new Animated.Value(0)),
+      React.Children.map(Pages, () => new Animated.Value(1)),
     ).current;
     const pageTotal = Pages.length - 1;
     const scaleRate = useMemo(() => {
@@ -43,7 +44,7 @@ export const SwiperR: React.FC<SwiperProps> = memo(
     }, [cardSetting.cardSpace, containerHeightState]);
     setCardSetting(mode, cardSetting);
 
-    const setInitialContentOffset = () => {
+    const setInitialContentOffset = useCallback(() => {
       if (contentOffset) {
         scrollViewRef.current.scrollTo({
           y: 0,
@@ -57,7 +58,7 @@ export const SwiperR: React.FC<SwiperProps> = memo(
           animated: false,
         });
       }
-    };
+    }, [containerWidthState, contentOffset]);
 
     const getCardWidth = useCallback(() => {
       if (mode === 'normal') {
@@ -141,7 +142,7 @@ export const SwiperR: React.FC<SwiperProps> = memo(
       pageTotal,
     ]);
 
-    const autoPlay = () => {
+    const AutoPlay = useCallback(() => {
       if (timerSign.current) {
         clearInterval(timerSign.current);
       }
@@ -158,17 +159,17 @@ export const SwiperR: React.FC<SwiperProps> = memo(
           x: (scrollIndex.current + 1) * containerWidthState,
         });
       }, 3000);
-    };
+    }, [containerWidthState, isAutoPlay, isStartOrEnd, pageTotal]);
 
     useEffect(() => {
       setInitialContentOffset();
       if (isAutoPlay) {
-        autoPlay();
+        AutoPlay();
       }
       return () => {
         clearInterval(timerSign.current);
       };
-    });
+    }, [AutoPlay, isAutoPlay, setInitialContentOffset]);
 
     return (
       <View ref={containerRef} style={style}>
@@ -182,7 +183,7 @@ export const SwiperR: React.FC<SwiperProps> = memo(
           contentContainerStyle={[Style.contentContainerStyle]}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
-          scrollEventThrottle={16}
+          scrollEventThrottle={3}
           pagingEnabled={true}
           contentOffset={{ x: containerWidthState * scrollIndex.current, y: 0 }}
           onScrollBeginDrag={() => {
@@ -192,7 +193,7 @@ export const SwiperR: React.FC<SwiperProps> = memo(
           }}
           onScrollEndDrag={() => {
             if (isAutoPlay) {
-              autoPlay();
+              AutoPlay();
             }
           }}
           onMomentumScrollEnd={() => {

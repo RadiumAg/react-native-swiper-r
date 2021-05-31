@@ -7,7 +7,7 @@ import { Animated } from 'react-native';
 
 export interface SwiperProps {
   style?: ViewStyle;
-  autoplay?: boolean;
+  autoPlay?: boolean;
   contentOffset?: number;
   mode: 'normal' | 'cardSide';
   cardSetting?: {
@@ -71,10 +71,16 @@ export function setAnimated(
           : 0,
       );
 
-      if (currentPageFloat > scrollIndex) {
+      if (!cardSetting.cardSpace) {
+        continue;
+      }
+      console.log(currentPageFloat - scrollIndex);
+
+      if (currentPageFloat >= scrollIndex) {
+        console.log(currentPageFloat - scrollIndex);
         currentScaleRate = 1 - currentPageFloat + scrollIndex;
       } else if (currentPageFloat <= scrollIndex) {
-        currentScaleRate = 1 - scrollIndex + currentPageFloat;
+        currentScaleRate = currentPageFloat - scrollIndex;
       }
       if (currentScaleRate < scaleRate) {
         currentScaleRate = scaleRate;
@@ -88,6 +94,9 @@ export function setAnimated(
           : 0,
       );
 
+      if (!cardSetting.cardSpace) {
+        continue;
+      }
       currentScaleRate = scaleRate * Math.abs(currentPageFloat - index);
       currentScaleRate = isOverRate(currentScaleRate, scaleRate);
       if (index === scrollIndex - 1) {
@@ -102,9 +111,10 @@ export function setAnimated(
               (whiteSpace * 2 - cardSetting.cardSmallSide)
           : 0,
       );
-      if (currentScaleRate) {
-        scaleAnimList[index].setValue(scaleRate);
+      if (!cardSetting.cardSpace) {
+        continue;
       }
+      scaleAnimList[index].setValue(scaleRate);
     }
   }
 }

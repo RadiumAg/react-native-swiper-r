@@ -17,15 +17,6 @@ export interface SwiperProps {
   };
 }
 
-function isOverRate(currentScaleRate: number, scaleRate: number) {
-  if (currentScaleRate > 1) {
-    currentScaleRate = 1;
-  } else if (currentScaleRate < scaleRate) {
-    currentScaleRate = 0.5;
-  }
-  return currentScaleRate;
-}
-
 export function setCardSetting(
   mode: string,
   cardSetting: {
@@ -36,6 +27,8 @@ export function setCardSetting(
 ) {
   if (mode === 'normal') {
     cardSetting.cardSmallSide = 0;
+    cardSetting.cardSide = 0;
+    cardSetting.cardSpace = 0;
   }
 }
 
@@ -74,17 +67,8 @@ export function setAnimated(
       if (!cardSetting.cardSpace) {
         continue;
       }
-
-      if (currentPageFloat > scrollIndex) {
-        currentScaleRate = 1 - currentPageFloat + scrollIndex;
-      } else if (currentPageFloat < scrollIndex) {
-        currentScaleRate = scrollIndex - currentPageFloat;
-      } else if (currentPageFloat === scrollIndex) {
-        currentScaleRate = 1;
-      }
-      if (currentScaleRate < scaleRate) {
-        currentScaleRate = scaleRate;
-      }
+      currentScaleRate =
+        (1 - currentPageFloat + scrollIndex) * (1 - scaleRate) + scaleRate;
       scaleAnimList[index].setValue(currentScaleRate);
     } else if (index === scrollIndex - 1 || index === scrollIndex + 1) {
       translateAnimList![index].setValue(
@@ -97,26 +81,25 @@ export function setAnimated(
       if (!cardSetting.cardSpace) {
         continue;
       }
-
       if (index === scrollIndex - 1) {
-        currentScaleRate = Math.abs(currentPageFloat - index);
-        currentScaleRate = isOverRate(currentScaleRate, scaleRate);
-        scaleAnimList[scrollIndex + 1]?.setValue(currentScaleRate);
+        currentScaleRate =
+          (1 - scaleRate) * (currentPageFloat - 1 - index) + scaleRate;
+        console.log(currentScaleRate);
       } else if (index === scrollIndex + 1) {
-        currentScaleRate = Math.abs(currentPageFloat - index);
-        currentScaleRate = isOverRate(currentScaleRate, scaleRate);
-        scaleAnimList[scrollIndex - 1]?.setValue(currentScaleRate);
+        currentScaleRate =
+          (1 - scaleRate) * (currentPageFloat + 1 - index) + scaleRate;
       }
+      scaleAnimList[index].setValue(currentScaleRate);
     } else {
+      if (!cardSetting.cardSpace) {
+        continue;
+      }
       translateAnimList![index].setValue(
         whiteSpace
           ? (currentPageFloat - index) *
               (whiteSpace * 2 - cardSetting.cardSmallSide)
           : 0,
       );
-      if (!cardSetting.cardSpace) {
-        continue;
-      }
       scaleAnimList[index].setValue(scaleRate);
     }
   }
@@ -130,14 +113,8 @@ export function scrollSetting(
   containerWidth: number,
 ) {
   const offset = (contentOffset = e.nativeEvent.contentOffset.x);
-  const PageFloat = offset / containerWidth;
-  currentPageFloat = PageFloat;
-  const currentPageInt = currentPageFloat % 1;
-  if (currentPageInt === 0 || currentPageInt >= 0.9) {
-    scrollIndex.current = Math.ceil(currentPageFloat);
-  }
+  currentPageFloat = offset / containerWidth;
   scrollIndex.current = Math.floor(currentPageFloat);
-
   return { contentOffset, currentPageFloat, scrollIndex };
 }
 

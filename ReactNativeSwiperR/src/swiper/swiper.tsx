@@ -17,7 +17,6 @@ export const SwiperR: React.FC<SwiperProps> = memo(
     style,
     autoPlay = false,
     cardSetting = { cardSmallSide: 0, cardSpace: 0 },
-    contentOffset,
     mode = 'normal',
   }) => {
     const isAutoPlay = autoPlay;
@@ -45,20 +44,12 @@ export const SwiperR: React.FC<SwiperProps> = memo(
     setCardSetting(mode, cardSetting);
 
     const setInitialContentOffset = useCallback(() => {
-      if (contentOffset) {
-        scrollViewRef.current.scrollTo({
-          y: 0,
-          x: contentOffset,
-          animated: false,
-        });
-      } else {
-        scrollViewRef.current.scrollTo({
-          y: 0,
-          x: containerWidthState * 2,
-          animated: false,
-        });
-      }
-    }, [containerWidthState, contentOffset]);
+      scrollViewRef.current.scrollTo({
+        y: 0,
+        x: containerWidthState * 2,
+        animated: false,
+      });
+    }, [containerWidthState]);
 
     const getCardWidth = useCallback(() => {
       if (mode === 'normal') {

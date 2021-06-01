@@ -70,7 +70,8 @@ const App = () => {
     // eslint-disable-next-line react-native/no-inline-styles
     <SafeAreaView style={{ flex: 1 }}>
       <SwiperR
-        cardSetting={{ cardSpace: 20, cardSmallSide: 20, cardSide: 250 }}
+        autoPlay={true}
+        cardSetting={{ cardSpace: 90, cardSmallSide: 40, cardSide: 250 }}
         mode={'cardSide'}
         style={{ width: '100%', height: 100 }}>
         <View
@@ -114,25 +115,6 @@ const App = () => {
           <Text style={{ color: 'white' }}>4</Text>
         </View>
       </SwiperR>
-      {/* <Swiper
-        width={300}
-        height={300}
-        paginationSelectedColor={'#CCFF66'}
-        autoplay={false}
-        direction={'row'}>
-        {_renderList()}
-      </Swiper> */}
-      {/* <Swiper style={styles.wrapper} showsButtons loop={true}>
-        <View testID="Hello" style={styles.slide1}>
-          <Text style={styles.text}>Hello Swiper</Text>
-        </View>
-        <View testID="Beautiful" style={styles.slide2}>
-          <Text style={styles.text}>Beautiful</Text>
-        </View>
-        <View testID="Simple" style={styles.slide3}>
-          <Text style={styles.text}>And simple</Text>
-        </View>
-      </Swiper> */}
     </SafeAreaView>
   );
 };

@@ -18,7 +18,7 @@ mode模式分为"normal"和"CardSide",normal下默认平铺，以下是演示
 
 #### "normal"模式
 
-![演示1](..\react-native-swiper-r\preview1.gif)
+![演示1](preview1.gif)
 
 ###### 演示代码
 
@@ -81,7 +81,7 @@ const App = () => {
 
 #### "cardSide"模式
 
-![演示2](..\react-native-swiper-r\preview2.gif)
+![演示2](preview2.gif)
 
 ###### 演示代码
 

@@ -5,7 +5,7 @@
 ## Api :car:
 
 | 参数        | 说明                      | 类型                                                    | 默认值                                   |
-| ----------- | ------------------------- | ------------------------------------------------------- | ---------------------------------------- |
+| ----------- | :------------------------ | ------------------------------------------------------- | ---------------------------------------- |
 | autoplay    | 是否自动切换              | boolean                                                 | true                                     |
 | cardSetting | 卡片设置，详见下图        | {cardSide:number;cardSpace:number;cardSmallSide:number} | {cardSide:0,cardSpace:0;cardSmallSide:0} |
 | mode        | normal和cardSide,详见下图 | 'normal' \|'cardSide'                                   | 'normal'                                 |
@@ -18,7 +18,7 @@ mode模式分为"normal"和"CardSide",normal下默认平铺，以下是演示
 
 #### "normal"模式
 
-![演示1](C:\Users\Iloveprpr\Desktop\react-native-swiper-r\演示1.gif)
+![演示1](..\react-native-swiper-r\演示1.gif)
 
 ###### 演示代码
 
@@ -81,7 +81,7 @@ const App = () => {
 
 #### "cardSide"模式
 
-![演示2](C:\Users\Iloveprpr\Desktop\react-native-swiper-r\演示2.gif)
+![演示2](..\react-native-swiper-r\演示2.gif)
 
 ###### 演示代码
 

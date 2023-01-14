@@ -1,6 +1,6 @@
 # react-native-swiper-r :1st_place_medal:
 
-一个基于用于react-native的轮播组件,参考[react-native-ezswiper]([easyui/react-native-ezswiper: swiper component for react-native (github.com)](https://github.com/easyui/react-native-ezswiper)) 的概念，并改用hook重写，修复闪屏问题。动画方面做了点改进，但是仍有问题，欢迎issues。
+一个基于用于react-native的轮播组件,参考[react-native-ezswiper]([easyui/react-native-ezswiper: swiper component for react-native (github.com)](https://github.com/easyui/react-native-ezswiper)) 的概念，并改用hook重写，修复闪屏问题。动画方面做了点改进，但是仍有问题，不建议在项目中使用。
 
 ## Api :car:
 

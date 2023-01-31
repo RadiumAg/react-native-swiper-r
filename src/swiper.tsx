@@ -1,17 +1,23 @@
-import React, { memo, useCallback, useEffect, useState } from 'react';
-import { useRef } from 'react';
-import { useMemo } from 'react';
+import React, {
+  PropsWithChildren,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Animated, ScrollView, View } from 'react-native';
 import {
-  setPages,
-  setAnimated,
-  scrollSetting,
   SwiperProps,
+  scrollSetting,
+  setAnimated,
   setCardSetting,
+  setPages,
 } from './_swiper';
 import { Style } from './swiper.style';
 
-export const SwiperR: React.FC<SwiperProps> = memo(
+export const SwiperR: React.FC<PropsWithChildren<SwiperProps>> = memo(
   ({
     children,
     style,
@@ -20,12 +26,12 @@ export const SwiperR: React.FC<SwiperProps> = memo(
     mode = 'normal',
   }) => {
     const isAutoPlay = autoPlay;
-    const timerSign = useRef<NodeJS.Timer>();
+    const timerSign = useRef<number>();
     const scrollViewRef = useRef<ScrollView>(null);
     let scrollIndex = useRef(2);
     let currentPageFloat = 2;
     let currentContentOffset = 0;
-    let containerRef = useRef<View>();
+    const containerRef = useRef<View>();
     const [containerWidthState, setContainerWidthState] = useState(0);
     const [containerHeightState, setContainerHeightState] = useState(0);
     const Pages = React.Children.toArray(children);
@@ -93,7 +99,8 @@ export const SwiperR: React.FC<SwiperProps> = memo(
                   },
                 ],
               },
-            ]}>
+            ]}
+          >
             <View style={[Style.cardStyle, { width: whiteSpace }]} />
             {child}
             <View style={[Style.cardStyle, { width: whiteSpace }]} />
@@ -211,7 +218,8 @@ export const SwiperR: React.FC<SwiperProps> = memo(
               scaleRate,
               cardSetting,
             );
-          }}>
+          }}
+        >
           {previewChildren}
         </ScrollView>
       </View>

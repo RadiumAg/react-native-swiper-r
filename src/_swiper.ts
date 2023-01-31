@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import { Animated } from 'react-native';
 
-export interface SwiperProps {
+export interface SwiperProps  {
   style?: ViewStyle;
   autoPlay?: boolean;
   contentOffset?: number;

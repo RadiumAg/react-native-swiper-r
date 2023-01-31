@@ -1,0 +1,9 @@
+{
+  "extends": [
+    "@raag/eslint-config-react",
+    "@raag/eslint-config-ts"
+  ],
+  "rules": {
+    "import/namespace": "off"
+  }
+}

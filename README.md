@@ -1,6 +1,6 @@
 # react-native-swiper-r :1st_place_medal:
 
-一个基于用于react-native的轮播组件,参考[react-native-ezswiper]([easyui/react-native-ezswiper: swiper component for react-native (github.com)](https://github.com/easyui/react-native-ezswiper)) 的概念，并改用hook重写，修复闪屏问题。动画方面做了点改进，但是仍有问题，不建议在项目中使用。
+一个基于用于react-native的轮播组件，用hook重写，修复闪屏问题。动画方面做了点改进，但是仍有问题，不建议在项目中使用。
 
 ## Api :car:
 
@@ -18,7 +18,7 @@ mode模式分为"normal"和"CardSide",normal下默认平铺，以下是演示
 
 #### "normal"模式
 
-![演示1](preview1.gif)
+![演示1](./doc/preview1.gif)
 
 ###### 演示代码
 
@@ -81,7 +81,7 @@ const App = () => {
 
 #### "cardSide"模式
 
-![演示2](preview2.gif)
+![演示2](./doc/preview2.gif)
 
 ###### 演示代码
 
